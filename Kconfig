@@ -1,0 +1,34 @@
+
+mainmenu "Maix-Speech configuration"
+
+menu "Toolchain configuration"
+	config TOOLCHAIN_PATH
+		string "toolchain path"
+		default ""
+	
+	config TOOLCHAIN_PREFIX
+		string "toolchain prefix"
+		default ""
+endmenu
+
+choice ARCH
+	prompt "CPU arch"
+	default ARCH_X86
+	help
+		"Select CPU arch"
+
+	config ARCH_X86
+		bool "x86"
+
+	config ARCH_R329
+		bool "R329"
+
+endchoice
+
+menu "Components configuration"
+	osource "${SDK_PATH}/components/*/Kconfig"
+	osource "${PROJECT_PATH}/*/Kconfig"
+endmenu
+
+
+
