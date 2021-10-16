@@ -90,9 +90,9 @@ void my_digitcb(void* data, int len)
     memset(digit_res1, ' ', 32);
     digit_res1[32-1]=0;
     memcpy(digit_res1, digit_res, strlen(digit_res));
-    printf("digit_res: %s\n", digit_res);
+    printf("digit_res1: %s\n", digit_res);
 
-    memset(lcd_buf+32*LCD_W*l_bpp/8, 0, LCD_W*(LCD_H-32)*l_bpp/8);
+    memset((uint8_t*)lcd_buf+32*LCD_W*l_bpp/8, 0, LCD_W*(LCD_H-32)*l_bpp/8);
     //font_draw(lcd_buf, l_bpp, LCD_W, LCD_H, 32, 0, 0, FONT_C_WHITE, FONT_C_BLACK, (char*)"DIGIT");
     int last_y = font_draw(lcd_buf, l_bpp, LCD_W, LCD_H, 32, 0, 32, FONT_C_YELLOW, FONT_C_BLUE, digit_res);
     fb_display(lcd_buf, 0, LCD_W, last_y, 0, 0, 0, 0);
@@ -176,18 +176,34 @@ void font_test(void)
 void lcd_init(void)
 {
     l_bpp = fb_get_bpp();
+    if(l_bpp==16)l_bpp=24;
+    if(l_bpp==-1)l_bpp=24;
     printf("### bpp=%d\n", l_bpp);
     return;
 }
 
 void lcd_clear(void)
-{return;
+{
     //while(1)
     {
         memset(lcd_buf, 0xff, LCD_W*LCD_H*l_bpp/8);
         fb_display(lcd_buf, 0, LCD_W, LCD_H, 0, 0, 0, 0);
         //sleep(1);
         memset(lcd_buf, 0x00, LCD_W*LCD_H*l_bpp/8);
+        fb_display(lcd_buf, 0, LCD_W, LCD_H, 0, 0, 0, 0);
+        //sleep(1);
+    }
+    return;
+}
+
+void lcd_clear1(void)
+{
+    //while(1)
+    {
+        memset(lcd_buf+LCD_W*32*l_bpp/8, 0xff, LCD_W*LCD_H*l_bpp/8);
+        fb_display(lcd_buf, 0, LCD_W, LCD_H, 0, 0, 0, 0);
+        //sleep(1);
+        memset(lcd_buf+LCD_W*32*l_bpp/8, 0x00, LCD_W*LCD_H*l_bpp/8);
         fb_display(lcd_buf, 0, LCD_W, LCD_H, 0, 0, 0, 0);
         //sleep(1);
     }
@@ -267,14 +283,15 @@ void set_kws(int flag)
         decoder_args[1] = (size_t)my_kw_gate;
         decoder_args[2] = 3;
         decoder_args[3] = 1;  //auto similar //自动去除音调 近音处理
-        res = ms_asr_decoder_cfg(DECODER_KWS, my_kwscb , &decoder_args, 3);
+        printf("qqqq");
+        res = ms_asr_decoder_cfg(DECODER_KWS, my_kwscb , &decoder_args, 3);printf("aaaa");
         if(res != 0) {printf("DECODER_KWS init error!\n");goto out1;};
         char* similar_pnys0[1] = {(char*)"xiang3"};    //每个最多注册10个近音词
         ms_asr_kws_reg_similar((char*)"xiao3", similar_pnys0, 1);
         char* similar_pnys1[3] = {(char*)"xin1", (char*)"ting1", (char*)"jin1"};
         ms_asr_kws_reg_similar((char*)"jing1", similar_pnys1, 3);
         lcd_clear(); 
-        font_draw(lcd_buf, l_bpp, LCD_W, LCD_H, 32, 0, 0, FONT_C_WHITE, FONT_C_BLACK, (char*)"KWS");
+        font_draw(lcd_buf, l_bpp, LCD_W, LCD_H, 32, 0, 0, FONT_C_WHITE, FONT_C_BLACK, (char*)"KWS   ");
         fb_display(lcd_buf, 0, LCD_W, LCD_H, 0, 0, 0, 0);
     } else {
         ms_asr_decoder_cfg(DECODER_KWS, NULL , NULL, 0);
@@ -288,6 +305,7 @@ void set_lvcsr(int flag)
     size_t decoder_args[10]; 
     int res = 0;
     if(flag){ //init 
+        
         decoder_args[0] = (size_t)opts.sfst_name;
         decoder_args[1] = (size_t)opts.sym_name;
         decoder_args[2] = (size_t)opts.phones_txt;
@@ -295,7 +313,7 @@ void set_lvcsr(int flag)
         memcpy(&decoder_args[4], &(opts.beam), sizeof(float));
         memcpy(&decoder_args[5], &(opts.bg_prob), sizeof(float));
         memcpy(&decoder_args[6], &(opts.scale), sizeof(float));
-        decoder_args[7] = (size_t)opts.is_mmap;
+        decoder_args[7] = (size_t)opts.is_mmap;//printf("#\n");
         res = ms_asr_decoder_cfg(DECODER_LVCSR, my_lvcsrcb , &decoder_args, 8);
         if(res != 0) {printf("DECODER_LVCSR init error!\n");};
         lcd_clear(); 
@@ -342,6 +360,7 @@ int main(int argc, char const* argv[])
     //�ֿ���ʾ����
     //font_test();
     lcd_init();
+    lcd_clear();
 
     if(opts.testpath != NULL){
         benchmark(opts.testpath, opts.testpny, opts.testhan);
@@ -378,13 +397,12 @@ int main(int argc, char const* argv[])
         res = ms_asr_decoder_cfg(DECODER_RAW, my_rawcb , NULL, 0);
         if(res != 0) {printf("DECODER_RAW init error!\n");goto free_decoder;};
     }
- #if 1   
+
+ #if 1
     if(opts.do_dig) set_dig(1);
     if(opts.do_kws) set_kws(1);
     if(opts.do_lvcsr) set_lvcsr(1);
-
-    lcd_clear();
-    //����
+    //
     while(!exit_flag) {
         int frames = ms_asr_run(1); //ÿ����һ֡
         if(frames<1) {
@@ -393,15 +411,13 @@ int main(int argc, char const* argv[])
         }
         if(key_read()==1) {
             printf("Reset ASR state!\n");
-            //ms_asr_clear();
-            lcd_clear();
+            lcd_clear1();
+            ms_asr_clear();
         }
     }
 #else 
     lcd_clear();
-    
     set_dig(1);
-    //����
     while(!exit_flag) {
         int frames = ms_asr_run(1); //ÿ����һ֡
         if(frames<1) {
@@ -411,7 +427,7 @@ int main(int argc, char const* argv[])
         if(key_read()==1) {
             printf("Change ASR state!\n");
             demo_idx+=1;
-            demo_idx = demo_idx%3;
+            demo_idx = demo_idx%3;printf("000");
             if(demo_idx==0){
                 set_dig(1); set_kws(0); set_lvcsr(0);
             } else if(demo_idx==1){

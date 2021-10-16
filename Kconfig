@@ -21,7 +21,25 @@ choice ARCH
 		bool "x86"
 
 	config ARCH_R329
-		bool "R329"
+		bool "r329"
+
+	config ARCH_RISCV64
+		bool "riscv64"
+
+	config ARCH_AARCH64
+		bool "aarch64"
+
+	config ARCH_ARMV7MUSL
+		bool "armv7musl"
+
+	config ARCH_ARMV7MUSL1
+		bool "armv7musl1"
+
+	config ARCH_ARMV7
+		bool "armv7"
+
+	config ARCH_V83X
+		bool "v83x"
 
 endchoice
 

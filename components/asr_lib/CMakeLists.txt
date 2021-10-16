@@ -17,7 +17,9 @@ list(APPEND ADD_REQUIREMENTS asound pthread)
 ###############################################
 
 ############ Add static libs ##################
-list(APPEND ADD_STATIC_LIB "lib/x86/libms_asr.a" "lib/x86/libMNN_x86.a")
+if(CONFIG_ARCH_X86)
+    list(APPEND ADD_STATIC_LIB "lib/x86/libms_asr_x86.a")
+endif()
 ###############################################
 
 ############ Add dynamic libs ##################

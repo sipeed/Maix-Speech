@@ -203,7 +203,7 @@ int font_draw(uint8_t* fb, int bpp, int lcd_w, int lcd_h, int char_size, int x_o
         printf("invalid font size %d!\n", char_size);
         return -1;
     }
-    if(bpp!=24 && bpp!=32){
+    if(bpp!=24 && bpp!=32 && bpp!=16){
         printf("unsupport bpp=%d\n", bpp);
         return y_oft;
     }
@@ -230,7 +230,7 @@ int font_draw(uint8_t* fb, int bpp, int lcd_w, int lcd_h, int char_size, int x_o
             char_w = char_size;
             p+=2;
         }
-        if(bpp == 24){
+        if(bpp == 24 || bpp==16){
             _font_char_draw_rgb(fb, lcd_w, lcd_h, char_w, char_h, &_x_oft, &_y_oft, char_buf, c_color, bg_color);
         } else if(bpp == 32) {
             _font_char_draw_argb(fb, lcd_w, lcd_h, char_w, char_h, &_x_oft, &_y_oft, char_buf, c_color, bg_color);

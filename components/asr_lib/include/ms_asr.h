@@ -58,9 +58,10 @@
 #define CN_PNY          1
 #define CN_PNYTONE      2
 #define CN_HAN          3
-#define EN_SW1K         4
-#define EN_SW3K         5
-#define EN_SW5K         6
+#define EN_PHONE        4
+#define EN_SW1K         5
+#define EN_SW3K         6
+#define EN_SW5K         7
 //en subword: https://bpemb.h-its.org/en/
 
 #define QUANT_NONE      0
