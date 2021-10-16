@@ -3,7 +3,9 @@ Maix-Speech
 
 [中文](./README_ZH.md) | English
 
+## Brief
 
+Now only support Chinese, See [中文](./README_ZH.md)
 
 
 

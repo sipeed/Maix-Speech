@@ -110,7 +110,7 @@ void my_lvcsrcb(void* data, int len)
     int last_y = font_draw(lcd_buf, l_bpp, LCD_W, LCD_H, 32, 0, 32, FONT_C_YELLOW, FONT_C_BLUE, words);
     int flash_h = last_y>LCD_H ? LCD_H : last_y;
     fb_display(lcd_buf, 0, LCD_W, flash_h, 0, 0, 0, 0);
-    printf("PNYS: %s\n", pnys);
+    printf("PNYS: %s\nHANS: %s", pnys, words);
     return ;
 }
 
@@ -236,7 +236,7 @@ int key_read(void)
     if(rv == -1) {
         perror("select"); /* an error accured */
     } else if(rv == 0) {
-        printf("key timeout; "); /* a timeout occured */
+        // printf("key timeout; "); /* a timeout occured */
     } else {
         int len = read(keys_fd, &t, sizeof(t)); /* there was data to read */
         if(len==sizeof(t)) {
@@ -332,7 +332,7 @@ int main(int argc, char const* argv[])
 	printf("MaixSense R329 ASR Demo\n");
 	printf("Developed by Sipeed.   \n");
 	printf("Email: support@sipeed.com\n");
-	printf("Usage: ./zhouyi_asr cfg_file\n");
+	printf("Usage: ./maix_asr cfg_file\n");
     printf("config file contains key:value every line\n");
 	printf("==============================================\n\n");
 
