@@ -51,5 +51,5 @@ See [github.com/Neutree/c_cpp_project_framework](https://github.com/Neutree/c_cp
 
 ## License
 
-**MIT**， see [LICENSE](./LICENSE)
+[**Apache 2.0**](./LICENSE) 
 
