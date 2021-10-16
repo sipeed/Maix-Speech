@@ -18,18 +18,20 @@ Maix-Speech 目前以静态库形式提供给用户评估使用，有商业定�
 
 ### 多平台支持
 Maix-Speech支持多种嵌入式平台，相关构建选项可在CMakeLists里设置：
-1. **r329**       INFER_ZHOUYI 全志R329平台，使用周易AIPU加速，[评估板 MaixSense](https://item.taobao.com/item.htm?id=652879327858)
-2. **v83x**       INFER_AWNN   全志AWNN平台，使用AWNN加速，[评估板 M2Dock](https://item.taobao.com/item.htm?id=635874427363)
-3. **armv7musl**  INFER_CPU0   armv7 musl工具链，CPU运算，[评估板 M2Dock](https://item.taobao.com/item.htm?id=635874427363)
-4. **armv7**      INFER_CPU0   armv7 gnu 工具链，CPU运算，[评估板 LicheePi Zero](https://item.taobao.com/item.htm?id=585033586770)
-5. **aarch64**    INFER_CPU0   aarch64 gnu 工具链，CPU运算，[评估板 MaixSense](https://item.taobao.com/item.htm?id=652879327858)
-6. **x86**        INFER_CPU0   x86_64，CPU运算
-7. **riscv64**    INFER_CPU0   64bit RISC-V C906，CPU运算，[评估板 Nezha D1](https://item.taobao.com/item.htm?id=644378932175) 	
+|平台标识|宏定义|芯片工具链|计算单元|评估板|
+|:--:   |:--:  |:--:     |:--:   |:--:  |
+|**r329**|INFER_ZHOUYI|全志R329,aarch64 gnu|周易AIPU|[MaixSense](https://item.taobao.com/item.htm?id=652879327858)|
+|**v83x**|INFER_AWNN|全志V83x,armv7 musl|AWNN|[M2Dock](https://item.taobao.com/item.htm?id=635874427363)|
+|**armv7musl**|INFER_CPU0|armv7 musl|CPU|[M2Dock](https://item.taobao.com/item.htm?id=635874427363)|
+|**armv7**|INFER_CPU0|armv7 gnu|CPU|[LicheePi Zero](https://item.taobao.com/item.htm?id=585033586770)|
+|**aarch64**|INFER_CPU0|aarch64 gnu|CPU运算|[MaixSense](https://item.taobao.com/item.htm?id=652879327858)|
+|**x86**|INFER_CPU0|x86_64|CPU|-|
+|**riscv64**|INFER_CPU0|RV64 C906|CPU|[Nezha D1](https://item.taobao.com/item.htm?id=644378932175)|
 	
 
 ### 极低的内存要求和优良的正确率
 Maix-Speech的内存占用相对于市面上的其他语音识别框架有数量级上的领先优势，并且保持良好的WER水平。  
-Maix-Speech最低可以实时运行(RTF<1)于典型的 1.0GHz Cortex-A7 内核的芯片上，并且最低仅占用25MB左右内存，  
+Maix-Speech最低可以实时运行(RTF<1)于典型的 **1.0GHz Cortex-A7** 内核的芯片上，并且最低仅占用**25MB**左右内存，  
 也就意味着它可以实时运行在典型的内封64MB内存的A7芯片上。
 
 **常见离线语音识别工具对比**
@@ -277,11 +279,12 @@ Q2.
 
 ## 致谢
 
-MaixSpeech 借鉴和使用了一些优秀的开源项目，包括：
+MaixSpeech 借鉴和使用了一些优秀的开源项目，并咨询了一些业内大佬，包括：
 
 1. WFST 解码 [Kaldi](http://kaldi-asr.org/)
 2. 前端推理框架 [MNN](https://github.com/alibaba/MNN)
-
+3. ARM中国 周易团队,尤其是toby
+4. wenet 彬彬大佬；原cvte大佬 pfluo；
 
 
 
