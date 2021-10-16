@@ -64,24 +64,16 @@ Maix-Speech最低可以实时运行(RTF<1)于典型的 1.0GHz Cortex-A7 内核�
 
 连续中文数字识别 （DIGIT)
 
-<video src="./assets/video/digit.mp4" controls="controls">
-您的浏览器不支持 video 标签。
-</video>
+https://user-images.githubusercontent.com/8625829/137585402-153873ee-ed5c-493a-9b61-15fb9a371151.mp4
 
 
 关键词识别（KWS）
 
-<video src="./assets/video/kws.mp4" controls="controls">
-您的浏览器不支持 video 标签。
-</video>
-
+https://user-images.githubusercontent.com/8625829/137585408-82510767-a14d-4c57-b2d8-3511a69f2974.mp4
 
 连续大词汇量语音识别（LVCSR）
 
-<video src="./assets/video/lvcsr.mp4" controls="controls">
-您的浏览器不支持 video 标签。
-</video>
-
+https://user-images.githubusercontent.com/8625829/137585414-0d017139-1bc1-4580-ba64-0e12934d534c.mp4
 
 ---
 
