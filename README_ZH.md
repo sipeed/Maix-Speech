@@ -25,7 +25,7 @@ Maix-Speech支持多种嵌入式平台，相关构建选项可在CMakeLists里�
 5. **aarch64**    INFER_CPU0   aarch64 gnu 工具链，CPU运算，[评估板 MaixSense](https://item.taobao.com/item.htm?id=652879327858)
 6. **x86**        INFER_CPU0   x86_64，CPU运算
 7. **riscv64**    INFER_CPU0   64bit RISC-V C906，CPU运算，[评估板 Nezha D1](https://item.taobao.com/item.htm?id=644378932175) 	
-8. **cuda**       INFER_CUDA   	
+	
 
 ### 极低的内存要求和优良的正确率
 Maix-Speech的内存占用相对于市面上的其他语音识别框架有数量级上的领先优势，并且保持良好的WER水平。  
@@ -140,11 +140,11 @@ python project.py build
 
 ## 运行语音识别例程
 
-以 `x86` 平台为例
+以 `x86` 平台为例的快速验证demo:
 
 * 先保证编译通过， 可执行文件 `projects/maix_asr/build/maix_asr` 存在并且可以运行
 
-* 在 [release 页面](https://github.com/sipeed/Maix-Speech/releases) 找到 `AM.zip` `lmM.zip` 文件并下载， 解压到`assets/test_files` 目录, `assets`目录结构如下
+* 在 [release 页面](https://github.com/sipeed/Maix-Speech/releases) 找到 `am_7332.zip` `lmM.zip` 文件并下载， 解压到`assets/test_files` 目录, `assets`目录结构如下
 ```
 assets
 ├── image
@@ -169,7 +169,8 @@ cd assets/test_files
 
 可以看到语音识别的结果
 ```
-HANS: 一点 二三 四五 六七 八九 PNYS: yi4 dian3 er4 san1 si4 wu3 liu4 qi1 ba1 jiu3 
+HANS: 一点 二三 四五 六七 八九 
+PNYS: yi4 dian3 er4 san1 si4 wu3 liu4 qi1 ba1 jiu3 
 ```
 
 如果是 `Windows` 需要 `GBK`编码则修改`asr_wav.cfg`中的
@@ -180,6 +181,9 @@ words_txt:lmM/words_utf.bin
 ```
 words_txt:lmM/words.bin
 ```
+
+测试其他wav文件只需要修改asr_wav.cfg中的device_name到对应测试wav路径即可   
+注意wav需要是16KHz采样，S16_LE存储格式。另外还支持pcm或者mic实时识别，详见usage_zh.md中对cfg文件的介绍。
 
 
 ---
@@ -240,6 +244,7 @@ pny wer表示带声调的拼音错误率，lmX表示加上对应语言模型后�
 帧长度关系到识别延迟，如192就会最大有768ms延迟，128则为512ms，可见帧长的模型错误率更优，但是延迟稍长  
 表中默认为流式识别，使用有限的上下文（一帧长度），noflow表示非流式识别（整体识别），可见非流式识别错误率大幅下降  
 ali表示对齐优化后的结果，即类sMBR处理后的结果，可见对齐训练后错误率大幅下降。  
+附件默认上传了192长度的流式识别模型，需要其他识别模型的可以联系矽速。
 
 
 ## Maix-Speech TTS 
