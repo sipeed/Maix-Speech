@@ -24,8 +24,8 @@ Maix-Speech支持多种嵌入式平台，相关构建选项可在CMakeLists里�
 |**v83x**|INFER_AWNN|全志V83x,armv7 musl|AWNN|[M2Dock](https://item.taobao.com/item.htm?id=635874427363)|
 |**armv7musl**|INFER_CPU0|armv7 musl|CPU|[M2Dock](https://item.taobao.com/item.htm?id=635874427363)|
 |**armv7**|INFER_CPU0|armv7 gnu|CPU|[LicheePi Zero](https://item.taobao.com/item.htm?id=585033586770)|
-|**aarch64**|INFER_CPU0|aarch64 gnu|CPU运算|[MaixSense](https://item.taobao.com/item.htm?id=652879327858)|
-|**x86**|INFER_CPU0|x86_64|CPU|-|
+|**aarch64**|INFER_CPU0|aarch64 gnu|CPU|[MaixSense](https://item.taobao.com/item.htm?id=652879327858)|
+|**x86**|INFER_CPU0|x86_64|CPU|Your Computer|
 |**riscv64**|INFER_CPU0|RV64 C906|CPU|[Nezha D1](https://item.taobao.com/item.htm?id=644378932175)|
 	
 
