@@ -258,18 +258,18 @@ TODO
 
 ## TODO List
 
-- [] Support English
-- [] Test Conformer
-- [] Support TTS
-- [] Support CHAT
+- [ ] Support English
+- [ ] Test Conformer
+- [ ] Support TTS
+- [ ] Support CHAT
 
 ## FAQ
 
 Q1. 代码是否以及何时开源？  
 > A1. star 超过[MaixPy](https://github.com/sipeed/MaixPy)项目后会考虑开源  
 
-Q2.
-A2.
+Q2.  
+> A2.  
 
 ## License
 
