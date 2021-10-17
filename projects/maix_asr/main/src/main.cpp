@@ -56,7 +56,7 @@ volatile int exit_flag = 0;
 
 
 static int tick = 0;
-void my_rawcb(void* data, int len)  //raw��lenָ���������ÿ������BEAM_CNT�����
+void my_rawcb(void* data, int len)  //data struct: pnyp_t data[len][BEAM_CNT]
 {
     pnyp_t* res = (pnyp_t*)data;
     printf("===================================\n");
@@ -64,7 +64,7 @@ void my_rawcb(void* data, int len)  //raw��lenָ����������
         pnyp_t* pp = res+BEAM_CNT*t;
         if(1){ 
             printf("T=%04d ====:", tick);
-            tick += 1;  //ȫ��ʱ��+1
+            tick += 1;  
             for(int i=0; i < 3; i++) { //BEAM_CNT
                 printf("  %4d %-6s: %.3f;", pp[i].idx, am_vocab[pp[i].idx], ((float)(pp[i].p)));
             }
@@ -110,7 +110,7 @@ void my_lvcsrcb(void* data, int len)
     int last_y = font_draw(lcd_buf, l_bpp, LCD_W, LCD_H, 32, 0, 32, FONT_C_YELLOW, FONT_C_BLUE, words);
     int flash_h = last_y>LCD_H ? LCD_H : last_y;
     fb_display(lcd_buf, 0, LCD_W, flash_h, 0, 0, 0, 0);
-    printf("PNYS: %s\nHANS: %s", pnys, words);
+    printf("PNYS: %s\nHANS: %s\n", pnys, words);
     return ;
 }
 
@@ -341,7 +341,7 @@ int main(int argc, char const* argv[])
 
     int res = 0;
     int demo_idx = 0;
-    //��������
+    //parse opts
     char* cfg_file = NULL;
 	if(argc < 2) {
 		printf("argc=%d error\n", argc);
@@ -352,12 +352,11 @@ int main(int argc, char const* argv[])
         printf("parse_opts failed! check your cfg file\n");
         return -1;
     }
-    //��ʼ���ֿ�
+    //load fonts (optional)
     char font_path[100];
     strcpy(font_path, opts.font_path); strcat(font_path, "16.FON"); res += font_reg(font_path, 16);
     strcpy(font_path, opts.font_path); strcat(font_path, "24.FON"); res += font_reg(font_path, 24);
     strcpy(font_path, opts.font_path); strcat(font_path, "32.FON"); res += font_reg(font_path, 32);
-    //�ֿ���ʾ����
     //font_test();
     lcd_init();
     lcd_clear();
@@ -391,8 +390,7 @@ int main(int argc, char const* argv[])
     //decoder_kws_test();
     //return 0;
 
-    //��ʼ��������
-    
+    //Main Loop
     if(opts.do_raw) {
         res = ms_asr_decoder_cfg(DECODER_RAW, my_rawcb , NULL, 0);
         if(res != 0) {printf("DECODER_RAW init error!\n");goto free_decoder;};
@@ -404,7 +402,7 @@ int main(int argc, char const* argv[])
     if(opts.do_lvcsr) set_lvcsr(1);
     //
     while(!exit_flag) {
-        int frames = ms_asr_run(1); //ÿ����һ֡
+        int frames = ms_asr_run(1); //1 frame default 768ms(am_xxyy_192)
         if(frames<1) {
             printf("run out\n");
             break;
@@ -419,7 +417,7 @@ int main(int argc, char const* argv[])
     lcd_clear();
     set_dig(1);
     while(!exit_flag) {
-        int frames = ms_asr_run(1); //ÿ����һ֡
+        int frames = ms_asr_run(1); //1 frame default 768ms(am_xxyy_192)֡
         if(frames<1) {
             printf("run out\n");
             break;
@@ -439,7 +437,7 @@ int main(int argc, char const* argv[])
     }
 #endif
     printf("Done~~~\n");
-    //�ͷ�
+    //deinit resource
 free_decoder:
     ms_asr_deinit();
     font_unreg(16);
