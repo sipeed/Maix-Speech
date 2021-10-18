@@ -106,7 +106,8 @@ git clone https://github.com/sipeed/Maix-Speech
 
 ### 编译
 
-* x86
+* x86  
+> 注意，conda环境下工具链可能有问题，请退出conda环境使用原生环境编译   
 
 ```
 cd projects/maix_asr
