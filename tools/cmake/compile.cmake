@@ -14,6 +14,7 @@ get_filename_component(parent_dir_name ${parent_dir} NAME)
 
 #  global variables
 set(g_dynamic_libs "" CACHE INTERNAL "g_dynamic_libs")
+set(g_lib_search_path "" CACHE INTERNAL "g_lib_search_path")
 
 # Set project dir, so just projec can include this cmake file!!!
 set(PROJECT_SOURCE_DIR ${parent_dir})
@@ -102,6 +103,25 @@ function(register_component)
     foreach(difinition ${ADD_DEFINITIONS_PRIVATE})
         target_compile_options(${component_name} PRIVATE ${difinition})
     endforeach()
+
+    # Add lib search path
+    if(ADD_LIB_SEARCH_PATH)
+        foreach(path ${ADD_LIB_SEARCH_PATH})
+            if(NOT EXISTS "${path}")
+                prepend(lib_full "${component_dir}/" ${path})
+                if(NOT EXISTS "${lib_full}")
+                    message(FATAL_ERROR "Can not find ${path} or ${lib_full}")
+                endif()
+                set(path ${lib_full})
+            endif()
+            get_filename_component(abs_dir ${path} ABSOLUTE)
+            if(EXISTS "${abs_dir}")
+                set(lib_search_path ${g_lib_search_path})
+                list(APPEND lib_search_path "${abs_dir}")
+                set(g_lib_search_path ${lib_search_path}  CACHE INTERNAL "g_lib_search_path")
+            endif()
+        endforeach()
+    endif()
 
     # Add static lib
     if(ADD_STATIC_LIB)
@@ -332,13 +352,6 @@ macro(project name)
                                   )
     add_custom_target(update_build_info COMMAND ${gen_build_info_config_cmd})
 
-    # Create exe_src.c to satisfy cmake's `add_executable` interface!
-    set(exe_src ${CMAKE_BINARY_DIR}/exe_src.c)
-    add_executable(${name} "${exe_src}")
-    add_custom_command(OUTPUT ${exe_src} COMMAND ${CMAKE_COMMAND} -E touch ${exe_src} VERBATIM)
-    add_custom_target(gen_exe_src DEPENDS "${exe_src}")
-    add_dependencies(${name} gen_exe_src)
-    
     # Sort component according to priority.conf config file
     set(component_priority_conf_file "${PROJECT_PATH}/compile/priority.conf")
     set(sort_components ${python}  ${SDK_PATH}/tools/cmake/sort_components.py
@@ -364,6 +377,10 @@ macro(project name)
             message(STATUS "component ${base_dir} not enabled")
         endif()
     endforeach()
+    foreach(abs_dir ${g_lib_search_path})
+        set(CMAKE_C_LINK_FLAGS "${CMAKE_C_LINK_FLAGS} -L${abs_dir} -Wl,-rpath,${abs_dir}")
+        set(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} -L${abs_dir} -Wl,-rpath,${abs_dir}")
+    endforeach()
     
     # Remove duplicate dynamic libs from var g_dynamic_libs
     set(dynamic_libs_abs "")
@@ -376,6 +393,13 @@ macro(project name)
 
     # Add menuconfig target for makefile
     add_custom_target(menuconfig COMMAND ${generate_config_cmd2})
+
+    # Create exe_src.c to satisfy cmake's `add_executable` interface!
+    set(exe_src ${CMAKE_BINARY_DIR}/exe_src.c)
+    add_executable(${name} "${exe_src}")
+    add_custom_command(OUTPUT ${exe_src} COMMAND ${CMAKE_COMMAND} -E touch ${exe_src} VERBATIM)
+    add_custom_target(gen_exe_src DEPENDS "${exe_src}")
+    add_dependencies(${name} gen_exe_src)
 
     # Add main component(lib)
     target_link_libraries(${name} main)

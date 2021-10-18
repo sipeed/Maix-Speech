@@ -19,6 +19,8 @@ except Exception:
     pass
 print("-- SDK_PATH:{}".format(sdk_path))
 
+os.environ["STAGING_DIR"] = "build"
+
 # execute project script from SDK
 project_file_path = sdk_path+"/tools/cmake/project.py"
 with open(project_file_path) as f:

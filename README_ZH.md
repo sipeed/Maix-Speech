@@ -6,8 +6,10 @@ Maix-Speech
 Maix-Speech 是专为嵌入式环境设计的离线语音库，设计目标包括：ASR/TTS/CHAT   
 作者的设计初衷是完成一个低至Cortex-A7 1.0GHz 单核下可以实时运行的ASR库。   
 目前市面上的离线语音库非常稀缺，即使有也对主控要求很高，Maix-Speech 针对语音识别算法进行了深度优化，在内存占用上达到了数量级上的领先，并且保持了优良的WER。  
-Maix-Speech 目前以静态库形式提供给用户评估使用，有商业定制需求的用户可以发邮件到support@sipeed.com咨询  
-技术交流可以发邮件到zepan@sipeed.com 或者 加MaixSpeech微信群交流  
+
+Maix-Speech 目前以静态库形式提供给用户评估使用，有商业定制需求的用户可以发邮件到 support@sipeed.com 咨询
+
+技术交流可以 扫下面的二维码加入 MaixSpeech微信群 或者 发邮件到 zepan@sipeed.com
 
 
 <a href="https://imgtu.com/i/5J9xgO"><img width=300 src="https://z3.ax1x.com/2021/10/16/5J9xgO.png"/></a>
@@ -17,7 +19,9 @@ Maix-Speech 目前以静态库形式提供给用户评估使用，有商业定�
 ## Maix-Speech 的优势	
 
 ### 多平台支持
-Maix-Speech支持多种嵌入式平台，相关构建选项可在CMakeLists里设置：
+
+Maix-Speech 支持多种嵌入式平台
+
 |平台标识|宏定义|芯片工具链|计算单元|评估板|
 |:--:   |:--:  |:--:     |:--:   |:--:  |
 |**r329**|INFER_ZHOUYI|全志R329,aarch64 gnu|周易AIPU|[MaixSense](https://item.taobao.com/item.htm?id=652879327858)|
@@ -30,8 +34,9 @@ Maix-Speech支持多种嵌入式平台，相关构建选项可在CMakeLists里�
 	
 
 ### 极低的内存要求和优良的正确率
+
 Maix-Speech的内存占用相对于市面上的其他语音识别框架有数量级上的领先优势，并且保持良好的WER水平。  
-Maix-Speech最低可以实时运行(RTF<1)于典型的 **1.0GHz Cortex-A7** 内核的芯片上，并且最低仅占用**25MB**左右内存，  
+Maix-Speech最低可以实时运行(RTF<1)于典型的 **1.0GHz Cortex-A7** 内核的芯片上，并且最低仅占用**25MB**左右内存，
 也就意味着它可以实时运行在典型的内封64MB内存的A7芯片上。
 
 **常见离线语音识别工具对比**
@@ -62,7 +67,7 @@ Maix-Speech最低可以实时运行(RTF<1)于典型的 **1.0GHz Cortex-A7** 内�
 
 ## 效果展示
 
-> 在全志R329上的运行效果，视频中板卡为MaixSense   
+> 在全志 R329 上的运行效果，视频中板卡为 MaixSense   
 
 连续中文数字识别 （DIGIT)
 
@@ -82,32 +87,65 @@ https://user-images.githubusercontent.com/8625829/137585414-0d017139-1bc1-4580-b
 ## Maix-Speech 工程结构
 
 ```
-├── projects
-│    └── asr                         // asr例程
-├── components
-│    ├── asr_lib
-│    │     ├── include
-│    │     └── src
-│    │     │     ├── ms_asr.h       // asr库头文件
-│    │     │     └── ms_asr_tbl.h
-│    └── utils
-├── tts_lib		        // 预留tts库
-├── chat_lib	        // 预留BERT库
-├── utils               // 工具组件， 包括 跑分 字库 配置文件解析等
-└── res			        // 测试时候需要使用的相关资源
+.
+├── assets
+│   └── test_files                # 提供的测试文件，方便上手测试
+├── components                     # 组件
+│   ├── asr_lib                   # 组件 asr_lib
+│   │   ├── CMakeLists.txt       # 组件配置文件
+│   │   ├── include              # 头文件
+│   │   ├── Kconfig              # 组件 menuconfig 配置文件
+│   │   ├── lib                  # 各个平台的库文件
+│   │   └── src                  # 源文件
+│   └── utils                     # 工具类组件，包括了跑分、字体等
+├── Kconfig                       # 最顶级的 menuconfig 配置文件
+├── LICENSE                       # 开源协议（证书）
+├── projects                      # 工程
+│   └── maix_asr                 # ASR 工程
+│       ├── CMakeLists.txt       # 工程配置文件
+│       ├── main                 # 工程里面的主组件
+│       └── project.py           # 构建脚本，方便输入命令
+├── README.md                     # 项目首页英文文档
+├── README_ZH.md                  # 项目首页中文文档
+├── tools                         # 项目构建相关代码，一般不用看
+└── usage_zh.md                   # 使用方法
 ```
 
-构建代码
+## 构建代码
+
+项目支持多平台， 不同的平台使用的工具链和库可能有差异，注意区别
+
+### 环境准备
+
+* x86 (Linux)
+
+    安装工具链和库(`Ubuntu` 为例)
+    ```
+    sudo apt update
+    sudo apt install build-essential git libasound2-dev python3 cmake
+    ```
+    > python 只是用在编译脚本上的，方便简单地输入编译命令， 如果你电脑里有任何一个版本的 python 都是可以的， 为确保不出问题最好是`Python3`。如果实在不想装 python ， 也可以手动使用 cmake 命令进行编译
+
+* R329
+  * 电脑安装工具链和库(`Ubuntu` 为例)
+  ```
+  sudo apt update
+  sudo apt install git python3 cmake
+  ```
+  * 下载工具链，并解压到指定文件夹
+  从 [realease](https://github.com/sipeed/Maix-Speech/releases) 下载 `r329_toolchain.tar.gz`, 并解压到一个路径，比如 `/opt/r329_toolchain`
 
 ### 克隆代码:
+
 ```
 git clone https://github.com/sipeed/Maix-Speech
 ```
 
 ### 编译
 
-* x86  
-> 注意，conda环境下工具链可能有问题，请退出conda环境使用原生环境编译   
+* x86 (Linux)
+
+> 注意，conda 环境下工具链可能有问题，如果出现错误可以先尝试 退出conda环境使用原生环境编译   
 
 ```
 cd projects/maix_asr
@@ -119,7 +157,7 @@ python project.py build
 #python project.py rebuild          # 如果有新建文件需要使用 rebuild
 # python project.py build --verbose # 打印详细构建过程
 
-./build/maix_asr
+./build/maix_asr                # 测试下运行可执行文件，可以执行即可
 
 python project.py clean         # 清除构建内容
 python project.py distclean     # 彻底清除构建内容
@@ -130,8 +168,8 @@ python project.py distclean     # 彻底清除构建内容
 
 ```
 cd projects/maix_asr
-# 配置工具链位置和前缀， distclean 不会清除工具链配置
-python project.py --toolchain /opt/toolchain/bin --toolchain-prefix aarch64-openwrt-linux- config
+# 配置工具链位置和前缀， distclean 不会清除工具链配置, 这会在目录下生成一个 .config.mk 文件
+python project.py --toolchain /opt/r329_toolchain/bin --toolchain-prefix aarch64-openwrt-linux- config
 
 python project.py menuconfig       # 选择 R329 架构
 python project.py build
@@ -143,7 +181,7 @@ python project.py build
 
 ## 运行语音识别例程
 
-以 `x86` 平台为例的快速验证demo:
+以 `x86(Linux)` 平台为例的快速验证 demo:
 
 * 先保证编译通过， 可执行文件 `projects/maix_asr/build/maix_asr` 存在并且可以运行
 
@@ -185,8 +223,10 @@ words_txt:lmM/words_utf.bin
 words_txt:lmM/words.bin
 ```
 
-测试其他wav文件只需要修改asr_wav.cfg中的device_name到对应测试wav路径即可   
-注意wav需要是16KHz采样，S16_LE存储格式。另外还支持pcm或者mic实时识别，详见usage_zh.md中对cfg文件的介绍。
+测试其他 wav 文件只需要修改 asr_wav.cfg 中的 device_name 到对应测试 wav 路径即可   
+**注意** wav 需要是 **16KHz** 采样，**S16_LE** 存储格式。另外还支持 PCM 或者 MIC 实时识别，详见 [usage_zh.md](./usage_zh.md) 中对 cfg 文件的介绍。
+
+> 可以使用工具转换，比如 `arecord -d 5 -r 16000 -c 1 -f S16_LE audio.wav`
 
 
 ---

@@ -11,6 +11,7 @@ list(APPEND ADD_INCLUDE "include"
 append_srcs_dir(ADD_SRCS "src")     # append source file in src dir to var ADD_SRCS
 # list(REMOVE_ITEM COMPONENT_SRCS "src/test.c")
 ###############################################
+list(APPEND ADD_LIB_SEARCH_PATH "${CONFIG_TOOLCHAIN_PATH}/../lib")
 
 ###### Add required/dependent components ######
 list(APPEND ADD_REQUIREMENTS asound pthread)
@@ -19,13 +20,17 @@ list(APPEND ADD_REQUIREMENTS asound pthread)
 ############ Add static libs ##################
 if(CONFIG_ARCH_X86)
     list(APPEND ADD_STATIC_LIB "lib/x86/libms_asr_x86.a")
+    list(APPEND ADD_DEFINITIONS -DINFER_TYPE=2)
+elseif(CONFIG_ARCH_R329)
+    list(APPEND ADD_REQUIREMENTS m)
+    list(APPEND ADD_STATIC_LIB "lib/r329/libms_asr_r329.a")
+    list(APPEND ADD_DYNAMIC_LIB "lib/r329/libaipudrv.so")
+    list(APPEND ADD_DEFINITIONS -DINFER_TYPE=0 -march=armv8-a)
 endif()
 ###############################################
 
 ############ Add dynamic libs ##################
-# list(APPEND ADD_DYNAMIC_LIB "lib/arch/v831/libmaix_nn.so"
-#                             "lib/arch/v831/libmaix_cam.so"
-# )
+# list(APPEND ADD_DYNAMIC_LIB "lib/r329.so")
 ###############################################
 
 #### Add compile option for this component ####
@@ -36,7 +41,7 @@ endif()
 
 #### Add compile option for this component
 #### and components denpend on this component
-list(APPEND ADD_DEFINITIONS -DINFER_TYPE=2)
+# list(APPEND ADD_DEFINITIONS -DINFER_TYPE=2)
 ###############################################
 
 ############ Add static libs ##################
