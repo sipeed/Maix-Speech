@@ -185,13 +185,13 @@ python project.py build
 
 * 先保证编译通过， 可执行文件 `projects/maix_asr/build/maix_asr` 存在并且可以运行
 
-* 在 [release 页面](https://github.com/sipeed/Maix-Speech/releases) 找到 `am_7332.zip` `lmM.zip` 文件并下载， 解压到`assets/test_files` 目录, `assets`目录结构如下
+* 在 [release 页面](https://github.com/sipeed/Maix-Speech/releases) 找到 `am_7332.zip` `lmM.zip` 文件并下载， 解压到`assets/test_files` 目录, 解压后`assets`目录结构如下
 ```
 assets
 ├── image
 └── test_files
     ├── 1.2.wav
-    ├── AM
+    ├── am_7332
     ├── asr_wav.cfg
     └── lmM
 ```
@@ -223,8 +223,9 @@ words_txt:lmM/words_utf.bin
 words_txt:lmM/words.bin
 ```
 
-测试其他 wav 文件只需要修改 asr_wav.cfg 中的 device_name 到对应测试 wav 路径即可   
-**注意** wav 需要是 **16KHz** 采样，**S16_LE** 存储格式。另外还支持 PCM 或者 MIC 实时识别，详见 [usage_zh.md](./usage_zh.md) 中对 cfg 文件的介绍。
+测试其他 `wav` 文件只需要修改 `asr_wav.cfg` 中的 `device_name` 到对应测试 `wav` 路径即可，测试其它模型，修改`model_name`指定文件路径即可
+
+**注意** wav 需要是 **16KHz** 采样，**S16_LE** 存储格式。另外还支持 `PCM` 或者 `MIC` 实时识别，详见 [usage_zh.md](./usage_zh.md) 中对 cfg 文件的介绍。
 
 > 可以使用工具转换，比如 `arecord -d 5 -r 16000 -c 1 -f S16_LE audio.wav`
 
