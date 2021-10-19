@@ -11,7 +11,7 @@ list(APPEND ADD_INCLUDE "include"
 append_srcs_dir(ADD_SRCS "src")     # append source file in src dir to var ADD_SRCS
 # list(REMOVE_ITEM COMPONENT_SRCS "src/test.c")
 ###############################################
-list(APPEND ADD_LIB_SEARCH_PATH "${CONFIG_TOOLCHAIN_PATH}/../lib")
+list(APPEND ADD_LINK_SEARCH_PATH "${CONFIG_TOOLCHAIN_PATH}/../lib")
 
 ###### Add required/dependent components ######
 list(APPEND ADD_REQUIREMENTS asound pthread)
@@ -41,7 +41,7 @@ endif()
 
 #### Add compile option for this component
 #### and components denpend on this component
-# list(APPEND ADD_DEFINITIONS -DINFER_TYPE=2)
+list(APPEND ADD_DEFINITIONS -fno-builtin)
 ###############################################
 
 ############ Add static libs ##################

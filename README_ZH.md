@@ -71,16 +71,16 @@ Maix-Speech最低可以实时运行(RTF<1)于典型的 **1.0GHz Cortex-A7** 内�
 
 连续中文数字识别 （DIGIT)
 
-https://user-images.githubusercontent.com/8625829/137585402-153873ee-ed5c-493a-9b61-15fb9a371151.mp4
+https://user-images.githubusercontent.com/8625829/137852798-efd0662d-c155-42e6-9fa7-c9de5cb348b9.mp4
 
 
 关键词识别（KWS）
 
-https://user-images.githubusercontent.com/8625829/137585408-82510767-a14d-4c57-b2d8-3511a69f2974.mp4
+https://user-images.githubusercontent.com/8625829/137852791-c99a0179-5963-46c9-9e7a-6c6b086a6839.mp4
 
 连续大词汇量语音识别（LVCSR）
 
-https://user-images.githubusercontent.com/8625829/137585414-0d017139-1bc1-4580-ba64-0e12934d534c.mp4
+https://user-images.githubusercontent.com/8625829/137852770-db0ca4a6-f32b-4c82-a40e-4fb8980f05ee.mp4
 
 ---
 
@@ -117,7 +117,7 @@ https://user-images.githubusercontent.com/8625829/137585414-0d017139-1bc1-4580-b
 
 ### 环境准备
 
-* x86 (Linux)
+* x86 (Linux) 或 在跑在其它架构的系统里编译，比如在`R329`的系统里使用`GCC`编译
 
     安装工具链和库(`Ubuntu` 为例)
     ```
@@ -126,7 +126,7 @@ https://user-images.githubusercontent.com/8625829/137585414-0d017139-1bc1-4580-b
     ```
     > python 只是用在编译脚本上的，方便简单地输入编译命令， 如果你电脑里有任何一个版本的 python 都是可以的， 为确保不出问题最好是`Python3`。如果实在不想装 python ， 也可以手动使用 cmake 命令进行编译
 
-* R329
+* R329 （交叉编译）
   * 电脑安装工具链和库(`Ubuntu` 为例)
   ```
   sudo apt update
@@ -143,7 +143,7 @@ git clone https://github.com/sipeed/Maix-Speech
 
 ### 编译
 
-* x86 (Linux)
+* x86 (Linux) 或 在跑在其它架构的系统里编译，比如在`R329`的系统里使用`GCC`编译
 
 > 注意，conda 环境下工具链可能有问题，如果出现错误可以先尝试 退出conda环境使用原生环境编译   
 
@@ -164,7 +164,7 @@ python project.py distclean     # 彻底清除构建内容
 
 ```
 
-* R329 和其它架构
+* R329 和其它架构（交叉编译）
 
 ```
 cd projects/maix_asr

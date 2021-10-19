@@ -14,7 +14,7 @@ get_filename_component(parent_dir_name ${parent_dir} NAME)
 
 #  global variables
 set(g_dynamic_libs "" CACHE INTERNAL "g_dynamic_libs")
-set(g_lib_search_path "" CACHE INTERNAL "g_lib_search_path")
+set(g_link_search_path "" CACHE INTERNAL "g_link_search_path")
 
 # Set project dir, so just projec can include this cmake file!!!
 set(PROJECT_SOURCE_DIR ${parent_dir})
@@ -105,8 +105,8 @@ function(register_component)
     endforeach()
 
     # Add lib search path
-    if(ADD_LIB_SEARCH_PATH)
-        foreach(path ${ADD_LIB_SEARCH_PATH})
+    if(ADD_LINK_SEARCH_PATH)
+        foreach(path ${ADD_LINK_SEARCH_PATH})
             if(NOT EXISTS "${path}")
                 prepend(lib_full "${component_dir}/" ${path})
                 if(NOT EXISTS "${lib_full}")
@@ -116,9 +116,11 @@ function(register_component)
             endif()
             get_filename_component(abs_dir ${path} ABSOLUTE)
             if(EXISTS "${abs_dir}")
-                set(lib_search_path ${g_lib_search_path})
-                list(APPEND lib_search_path "${abs_dir}")
-                set(g_lib_search_path ${lib_search_path}  CACHE INTERNAL "g_lib_search_path")
+                set(link_search_path ${g_link_search_path})
+                list(APPEND link_search_path "${abs_dir}")
+                # target_link_directories(${component_name} PUBLIC ${link_search_path}) # this will fail add -L -Wl,-rpath flag for some .so
+                list(REMOVE_DUPLICATES link_search_path)
+                set(g_link_search_path ${link_search_path}  CACHE INTERNAL "g_link_search_path")
             endif()
         endforeach()
     endif()
@@ -147,11 +149,13 @@ function(register_component)
                 endif()
                 set(lib ${lib_full})
             endif()
+            get_filename_component(lib ${lib} ABSOLUTE)
             list(APPEND dynamic_libs ${lib})
             get_filename_component(lib_dir ${lib} DIRECTORY)
             get_filename_component(lib_name ${lib} NAME)
             target_link_libraries(${component_name} ${include_type} -L${lib_dir} ${lib_name})
         endforeach()
+        list(REMOVE_DUPLICATES dynamic_libs)
         set(g_dynamic_libs ${dynamic_libs}  CACHE INTERNAL "g_dynamic_libs")
     endif()
 
@@ -377,24 +381,17 @@ macro(project name)
             message(STATUS "component ${base_dir} not enabled")
         endif()
     endforeach()
-    foreach(abs_dir ${g_lib_search_path})
+
+    # Add lib search path to link flags
+    foreach(abs_dir ${g_link_search_path})
         set(CMAKE_C_LINK_FLAGS "${CMAKE_C_LINK_FLAGS} -L${abs_dir} -Wl,-rpath,${abs_dir}")
         set(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} -L${abs_dir} -Wl,-rpath,${abs_dir}")
     endforeach()
-    
-    # Remove duplicate dynamic libs from var g_dynamic_libs
-    set(dynamic_libs_abs "")
-    foreach(item ${g_dynamic_libs})
-    get_filename_component(item ${item} ABSOLUTE)
-    list(APPEND dynamic_libs_abs ${item})
-    endforeach()
-    set(g_dynamic_libs ${dynamic_libs_abs})
-    list(REMOVE_DUPLICATES g_dynamic_libs)
 
     # Add menuconfig target for makefile
     add_custom_target(menuconfig COMMAND ${generate_config_cmd2})
 
-    # Create exe_src.c to satisfy cmake's `add_executable` interface!
+    # Create dummy source file exe_src.c to satisfy cmake's `add_executable` interface!
     set(exe_src ${CMAKE_BINARY_DIR}/exe_src.c)
     add_executable(${name} "${exe_src}")
     add_custom_command(OUTPUT ${exe_src} COMMAND ${CMAKE_COMMAND} -E touch ${exe_src} VERBATIM)
