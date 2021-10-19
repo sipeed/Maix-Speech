@@ -11,10 +11,9 @@ list(APPEND ADD_INCLUDE "include"
 append_srcs_dir(ADD_SRCS "src")     # append source file in src dir to var ADD_SRCS
 # list(REMOVE_ITEM COMPONENT_SRCS "src/test.c")
 ###############################################
-list(APPEND ADD_LINK_SEARCH_PATH "${CONFIG_TOOLCHAIN_PATH}/../lib")
 
 ###### Add required/dependent components ######
-list(APPEND ADD_REQUIREMENTS asound pthread)
+list(APPEND ADD_REQUIREMENTS asound pthread m)
 ###############################################
 
 ############ Add static libs ##################
@@ -22,10 +21,16 @@ if(CONFIG_ARCH_X86)
     list(APPEND ADD_STATIC_LIB "lib/x86/libms_asr_x86.a")
     list(APPEND ADD_DEFINITIONS -DINFER_TYPE=2)
 elseif(CONFIG_ARCH_R329)
-    list(APPEND ADD_REQUIREMENTS m)
+    list(APPEND ADD_LINK_SEARCH_PATH "${CONFIG_TOOLCHAIN_PATH}/../lib")
     list(APPEND ADD_STATIC_LIB "lib/r329/libms_asr_r329.a")
     list(APPEND ADD_DYNAMIC_LIB "lib/r329/libaipudrv.so")
     list(APPEND ADD_DEFINITIONS -DINFER_TYPE=0 -march=armv8-a)
+elseif(CONFIG_ARCH_V83X)
+    list(APPEND ADD_LINK_SEARCH_PATH "lib/v83x")
+    list(APPEND ADD_STATIC_LIB "lib/v83x/libms_asr_v83x.a")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-unused-variable -fPIC -c -s -ffunction-sections -fdata-sections -march=armv7-a  -mtune=cortex-a7" PARENT_SCOPE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Wno-unused-variable -fPIC -fexceptions -s -ffunction-sections -fdata-sections -fpermissive -march=armv7-a  -mtune=cortex-a7" PARENT_SCOPE)
+    list(APPEND ADD_DEFINITIONS -DINFER_TYPE=1 -D__ARM__ -D__ARMV7__ -DCONF_KERNEL_IOMMU -DCONF_KERNEL_VERSION_4_9)
 endif()
 ###############################################
 
@@ -41,7 +46,7 @@ endif()
 
 #### Add compile option for this component
 #### and components denpend on this component
-list(APPEND ADD_DEFINITIONS -fno-builtin)
+# list(APPEND ADD_DEFINITIONS -fno-builtin)
 ###############################################
 
 ############ Add static libs ##################

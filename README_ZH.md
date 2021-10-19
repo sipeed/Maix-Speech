@@ -117,23 +117,29 @@ https://user-images.githubusercontent.com/8625829/137852770-db0ca4a6-f32b-4c82-a
 
 ### 环境准备
 
-* x86 (Linux) 或 在跑在其它架构的系统里编译，比如在`R329`的系统里使用`GCC`编译
+首先电脑安装工具链和库(`Ubuntu` 为例)
 
+```
+sudo apt update
+sudo apt install git python3 cmake
+```
+
+> python 只是用在编译脚本上的，方便简单地输入编译命令， 如果你电脑里有任何一个版本的 python 都是可以的， 为确保不出问题最好是`Python3`。如果实在不想装 python ， 也可以手动使用 cmake 命令进行编译
+
+
+* x86 (Linux) 或 在跑在其它架构的系统里编译，比如在`R329`的系统里使用`GCC`编译
     安装工具链和库(`Ubuntu` 为例)
     ```
-    sudo apt update
-    sudo apt install build-essential git libasound2-dev python3 cmake
+    sudo apt install build-essential libasound2-dev
     ```
-    > python 只是用在编译脚本上的，方便简单地输入编译命令， 如果你电脑里有任何一个版本的 python 都是可以的， 为确保不出问题最好是`Python3`。如果实在不想装 python ， 也可以手动使用 cmake 命令进行编译
 
 * R329 （交叉编译）
-  * 电脑安装工具链和库(`Ubuntu` 为例)
-  ```
-  sudo apt update
-  sudo apt install git python3 cmake
-  ```
   * 下载工具链，并解压到指定文件夹
   从 [realease](https://github.com/sipeed/Maix-Speech/releases) 下载 `r329_toolchain.tar.gz`, 并解压到一个路径，比如 `/opt/r329_toolchain`
+
+* v83x (v831/v833)
+  * 下载工具链，在[这里](https://github.com/sipeed/libmaix)找到工具链下载链接并下载工具链，解压到一个文件夹，比如`/opt/toolchain-sunxi-musl`
+  
 
 ### 克隆代码:
 
@@ -164,14 +170,27 @@ python project.py distclean     # 彻底清除构建内容
 
 ```
 
-* R329 和其它架构（交叉编译）
+* 其它架构（交叉编译）
+
+交叉编译需要工具链， 前面的准备工作中已经下载了工具链，在编译时需要配置工具链信息到工程里面
+
+需要配置：
+* 工具链可执行文件所在文件夹路径，比如`/opt/r329_toolchain/bin` `/opt/toolchain-sunxi-musl/bin`
+* 工具链前缀，比如`aarch64-openwrt-linux-`
+
+| 架构 | 前缀名 |
+| --- | ----- |
+| r329 | aarch64-openwrt-linux- |
+| v83x | arm-openwrt-linux-muslgnueabi- |
+
 
 ```
 cd projects/maix_asr
 # 配置工具链位置和前缀， distclean 不会清除工具链配置, 这会在目录下生成一个 .config.mk 文件
-python project.py --toolchain /opt/r329_toolchain/bin --toolchain-prefix aarch64-openwrt-linux- config
+python project.py --toolchain 工具链可执行文件路径路径 --toolchain-prefix 前缀名 config
+# python project.py --toolchain /opt/r329_toolchain/bin --toolchain-prefix aarch64-openwrt-linux- config
 
-python project.py menuconfig       # 选择 R329 架构
+python project.py menuconfig       # 选择 架构
 python project.py build
 
 # python project.py clean_conf     # 清除工具链配置
@@ -179,9 +198,10 @@ python project.py build
 
 关于更详细地如何使用编译框架请看 [github.com/Neutree/c_cpp_project_framework](https://github.com/Neutree/c_cpp_project_framework)
 
+
 ## 运行语音识别例程
 
-以 `x86(Linux)` 平台为例的快速验证 demo:
+以 `x86(Linux)` 平台为例的快速验证 demo， 其它平台特别是交叉编译的平台需要自行拷贝可执行文件到开发板的系统里面再运行:
 
 * 先保证编译通过， 可执行文件 `projects/maix_asr/build/maix_asr` 存在并且可以运行
 

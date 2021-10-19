@@ -30,7 +30,7 @@ choice ARCH
 		bool "aarch64"
 
 	config ARCH_ARMV7MUSL
-		bool "armv7musl"
+		bool "armv7musl (v83x CPU)"
 
 	config ARCH_ARMV7MUSL1
 		bool "armv7musl1"
