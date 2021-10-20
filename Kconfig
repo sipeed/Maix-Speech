@@ -27,7 +27,7 @@ choice ARCH
 		bool "riscv64"
 
 	config ARCH_AARCH64
-		bool "aarch64"
+		bool "aarch64 (Raspberry Pi 4)"
 
 	config ARCH_ARMV7MUSL
 		bool "armv7musl (v83x CPU)"
@@ -36,10 +36,10 @@ choice ARCH
 		bool "armv7musl1"
 
 	config ARCH_ARMV7
-		bool "armv7"
+		bool "armv7 (Raspberry Pi 3)"
 
 	config ARCH_V83X
-		bool "v83x"
+		bool "v83x (v831 v833)"
 
 endchoice
 

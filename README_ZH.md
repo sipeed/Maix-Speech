@@ -127,7 +127,7 @@ sudo apt install git python3 cmake
 > python 只是用在编译脚本上的，方便简单地输入编译命令， 如果你电脑里有任何一个版本的 python 都是可以的， 为确保不出问题最好是`Python3`。如果实在不想装 python ， 也可以手动使用 cmake 命令进行编译
 
 
-* x86 (Linux) 或 在跑在其它架构的系统里编译，比如在`R329`的系统里使用`GCC`编译
+* x86 (Linux) 或 在跑在其它架构的系统里编译，比如在`R329` 或 `树莓派` 的系统里使用`GCC`编译
     安装工具链和库(`Ubuntu` 为例)
     ```
     sudo apt install build-essential libasound2-dev
@@ -149,7 +149,7 @@ git clone https://github.com/sipeed/Maix-Speech
 
 ### 编译
 
-* x86 (Linux) 或 在跑在其它架构的系统里编译，比如在`R329`的系统里使用`GCC`编译
+* x86 (Linux) 或 在跑在其它架构的系统里编译，比如在`R329`或 `树莓派` 的系统里使用`GCC`编译
 
 > 注意，conda 环境下工具链可能有问题，如果出现错误可以先尝试 退出conda环境使用原生环境编译   
 
@@ -157,7 +157,7 @@ git clone https://github.com/sipeed/Maix-Speech
 cd projects/maix_asr
 
 python project.py clean_conf    # 清除工具链配置
-python project.py menuconfig    # 配置选择芯片架构（ARCH），默认就是 x86
+python project.py menuconfig    # 配置选择芯片架构（ARCH），默认是 x86
 
 python project.py build
 #python project.py rebuild          # 如果有新建文件需要使用 rebuild
@@ -166,7 +166,7 @@ python project.py build
 ./build/maix_asr                # 测试下运行可执行文件，可以执行即可
 
 python project.py clean         # 清除构建内容
-python project.py distclean     # 彻底清除构建内容
+python project.py distclean     # 彻底清除构建内容, 包括 menuconfig 内容
 
 ```
 
@@ -182,6 +182,10 @@ python project.py distclean     # 彻底清除构建内容
 | --- | ----- |
 | r329 | aarch64-openwrt-linux- |
 | v83x | arm-openwrt-linux-muslgnueabi- |
+| armv7| arm-linux-gnueabihf-   |
+| armv7musl | arm-openwrt-linux-muslgnueabi- |
+| aarch64   | aarch64-openwrt-linux-         |
+| riscv64   | riscv64-unknown-linux-gnu-     |
 
 
 ```
