@@ -21,22 +21,22 @@ choice ARCH
 		bool "x86 (Linux)"
 
 	config ARCH_R329
-		bool "r329"
+		bool "r329 (AIPU)"
 
 	config ARCH_RISCV64
-		bool "riscv64"
+		bool "riscv64 (D1)"
 
 	config ARCH_AARCH64
-		bool "aarch64 (r329 CPU)"
+		bool "aarch64 (r329)"
 
 	config ARCH_ARMV7MUSL
-		bool "armv7musl (v83x CPU)"
+		bool "armv7musl (v83x)"
 
 	config ARCH_ARMV7
 		bool "armv7 (Raspberry Pi 32bit)"
 
 	config ARCH_V83X
-		bool "v83x (v831 v833)"
+		bool "v83x (v831/v833 AWNN)"
 
 endchoice
 

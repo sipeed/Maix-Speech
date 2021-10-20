@@ -16,6 +16,10 @@ append_srcs_dir(ADD_SRCS "src")     # append source file in src dir to var ADD_S
 list(APPEND ADD_REQUIREMENTS asound pthread m)
 ###############################################
 
+if(CONFIG_TOOLCHAIN_PATH)
+    message( "===== cross compile =====")
+endif()
+
 ############ Add static libs ##################
 if(CONFIG_ARCH_X86)
     list(APPEND ADD_STATIC_LIB "lib/x86/libms_asr_x86.a")
@@ -34,19 +38,22 @@ elseif(CONFIG_ARCH_ARMV7)
     list(APPEND ADD_LINK_SEARCH_PATH "lib/armv7")
     list(APPEND ADD_STATIC_LIB "lib/armv7/libms_asr_armv7.a")
     list(APPEND ADD_DEFINITIONS -march=armv7-a)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive" PARENT_SCOPE)
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive" PARENT_SCOPE)
 elseif(CONFIG_ARCH_AARCH64)
     list(APPEND ADD_LINK_SEARCH_PATH "lib/aarch64" "${CONFIG_TOOLCHAIN_PATH}/../lib")
     list(APPEND ADD_STATIC_LIB "lib/aarch64/libms_asr_aarch64.a")
     list(APPEND ADD_DEFINITIONS -march=armv8-a)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive" PARENT_SCOPE)
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive" PARENT_SCOPE)
 elseif(CONFIG_ARCH_ARMV7MUSL)
     list(APPEND ADD_LINK_SEARCH_PATH "lib/armv7musl" "${CONFIG_TOOLCHAIN_PATH}/../lib")
     list(APPEND ADD_STATIC_LIB "lib/armv7musl/libms_asr_armv7musl.a")
     list(APPEND ADD_DEFINITIONS -march=armv7-a -g)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive" PARENT_SCOPE)
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive" PARENT_SCOPE)
 elseif(CONFIG_ARCH_RISCV64)
-    message(FATAL_ERROR "not support riscv64 yet")
+    list(APPEND ADD_LINK_SEARCH_PATH "lib/riscv64" "${CONFIG_TOOLCHAIN_PATH}/../lib")
+    list(APPEND ADD_STATIC_LIB "lib/riscv64/libms_asr_riscv64.a")
+    # list(APPEND ADD_DEFINITIONS -march=rv64gcvxtheadc)
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive" PARENT_SCOPE)
 endif()
 ###############################################
 
