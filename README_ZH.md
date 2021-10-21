@@ -135,13 +135,19 @@ sudo apt install git python3 cmake
     sudo apt install build-essential libasound2-dev
     ```
 
-* R329 （交叉编译）
-  * 下载工具链，并解压到指定文件夹
-  从 [realease](https://github.com/sipeed/Maix-Speech/releases) 下载 `r329_toolchain.tar.gz`, 并解压到一个路径，比如 `/opt/r329_toolchain`
+* 交叉编译
+下载工具链，并解压到指定文件夹
+比如 `R329`, 从 [realease](https://github.com/sipeed/Maix-Speech/releases) 下载 `r329_toolchain.tar.gz`, 并解压到一个路径，比如 `/opt/r329_toolchain`
+比如 `v83x`, 在[这里](https://github.com/sipeed/libmaix)找到工具链下载链接并下载工具链，解压到一个文件夹，比如`/opt/toolchain-sunxi-musl`
 
-* v83x (v831/v833)
-  * 下载工具链，在[这里](https://github.com/sipeed/libmaix)找到工具链下载链接并下载工具链，解压到一个文件夹，比如`/opt/toolchain-sunxi-musl`
-  
+| 架构 | 前缀名 | 工具链 |
+| --- | ----- | ------ |
+| r329 | aarch64-openwrt-linux-         | [realease](https://github.com/sipeed/Maix-Speech/releases) 下寻找 r329 toolchain |
+| v83x | arm-openwrt-linux-muslgnueabi- | [sipeed/libmaix](https://github.com/sipeed/libmaix) README 中寻找 |
+| armv7| arm-linux-gnueabihf-           | [linaro(v3s)](https://wiki.sipeed.com/soft/Lichee/zh/Zero-Doc/System_Development/uboot_build.html) 或者其它 arm-linux-gnueabihf toolchain  |
+| armv7musl | arm-openwrt-linux-muslgnueabi- | [sipeed/libmaix (v83x)](https://github.com/sipeed/libmaix) README 中寻找 |
+| aarch64   | aarch64-openwrt-linux-         | [realease](https://github.com/sipeed/Maix-Speech/releases) 下寻找 r329 toolchain |
+| riscv64   | riscv64-unknown-linux-gnu-     | |
 
 ### 克隆代码:
 
@@ -178,16 +184,7 @@ python project.py distclean     # 彻底清除构建内容, 包括 menuconfig �
 
 需要配置：
 * 工具链可执行文件所在文件夹路径，比如`/opt/r329_toolchain/bin` `/opt/toolchain-sunxi-musl/bin`
-* 工具链前缀，比如`aarch64-openwrt-linux-`
-
-| 架构 | 前缀名 |
-| --- | ----- |
-| r329 | aarch64-openwrt-linux- |
-| v83x | arm-openwrt-linux-muslgnueabi- |
-| armv7| arm-linux-gnueabihf-   |
-| armv7musl | arm-openwrt-linux-muslgnueabi- |
-| aarch64   | aarch64-openwrt-linux-         |
-| riscv64   | riscv64-unknown-linux-gnu-     |
+* 工具链前缀，可在前面的表格中找到， 比如`aarch64-openwrt-linux-`
 
 
 ```

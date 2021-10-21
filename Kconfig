@@ -33,7 +33,7 @@ choice ARCH
 		bool "armv7musl (v83x)"
 
 	config ARCH_ARMV7
-		bool "armv7 (Raspberry Pi 32bit)"
+		bool "armv7 (Raspberry Pi 32bit, V3S)"
 
 	config ARCH_V83X
 		bool "v83x (v831/v833 AWNN)"
