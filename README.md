@@ -5,6 +5,8 @@ Maix-Speech
 
 ## Brief
 
+Maix Speech AI lib, a fast and small speech lib running on embedded devices (and PC), including ASR, chat, TTS etc.
+
 Now only support Chinese, See [中文](./README_ZH.md)
 
 
