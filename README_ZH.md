@@ -12,7 +12,7 @@ Maix-Speech 目前以静态库形式提供给用户评估使用，有商业定�
 技术交流可以 扫下面的二维码加入 MaixSpeech微信群 或者 发邮件到 zepan@sipeed.com
 
 
-<a href="https://cdn.sipeed.com/maix-speech-wechat.jpg"><img width=300 src="https://cdn.sipeed.com/maix-speech-wechat.jpg"/></a>
+<a href="assets/wechat.png"><img width=300 src="assets/wechat.png"/></a>
 
 ---
 
